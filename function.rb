@@ -10,7 +10,7 @@ end
 
 def get_bearer_token(request)
   pattern = /^Bearer /
-  header = request['headers']['Authorization']
+  header = get_header(request['headers'], 'authorization')
   header.gsub(pattern, '') if header && header.match(pattern)
 end
 
