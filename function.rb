@@ -37,6 +37,8 @@ def main(event:, context:)
           payload = decoded_token.first
           data = payload['data']
           response(body: data, status: 200)
+        rescue JWT::DecodeError
+          response(body:nil, status: 403)
         rescue JWT::ExpiredSignature
           response(body: nil, status: 401)
         rescue JWT::ImmatureSignature
