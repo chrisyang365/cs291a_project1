@@ -62,7 +62,7 @@ def main(event:, context:)
       response(body: nil, status: 405)
     end
   else
-    response(body: nil, status: 405)
+    response(body: nil, status: 404)
   end
 end
 
@@ -90,8 +90,8 @@ if $PROGRAM_NAME == __FILE__
   # Generate a token
   payload = {
     data: { user_id: 128 },
-    exp: Time.now.to_i + 1,
-    nbf: Time.now.to_i
+    exp: Time.now.to_i + 5,
+    nbf: Time.now.to_i + 2
   }
   token = JWT.encode payload, ENV['JWT_SECRET'], 'HS256'
   # Call /
