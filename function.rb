@@ -14,6 +14,15 @@ def get_bearer_token(request)
   header.gsub(pattern, '') if header && header.match(pattern)
 end
 
+def get_header(headers, header_type)
+  for header in headers.keys
+    if header.downcase == header_type.downcase
+      return headers[header]
+    end
+  end
+  return ''
+end
+
 def main(event:, context:)
   # You shouldn't need to use context, but its fields are explained here:
   # https://docs.aws.amazon.com/lambda/latest/dg/ruby-context.html
@@ -41,7 +50,7 @@ def main(event:, context:)
     end
   elsif path == '/token'
     if method == 'POST'
-      content_type = event['headers']['Content-Type']
+      content_type = get_header(event['headers'], 'content-type')
       body = event['body'] ? event['body'] : ''
       if content_type != 'application/json'
         response(body: nil, status: 415)
@@ -91,7 +100,7 @@ if $PROGRAM_NAME == __FILE__
   payload = {
     data: { user_id: 128 },
     exp: Time.now.to_i + 5,
-    nbf: Time.now.to_i + 2
+    nbf: Time.now.to_i
   }
   token = JWT.encode payload, ENV['JWT_SECRET'], 'HS256'
   # Call /
