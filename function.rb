@@ -58,7 +58,7 @@ def main(event:, context:)
         response(body: nil, status: 422)
       else
         payload = {
-          data: body.to_json,
+          data: body,
           exp: Time.now.to_i + 5,
           nbf: Time.now.to_i + 2
         }
